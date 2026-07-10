@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- CUSTOMIZE: Change this to your tool name -->
-<title>NOVA Calculator Template</title>
+<title>Profit Margin Planner</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  /* NOVA BRAND TOKENS — update with your Brand Token Cheatsheet values */
   :root {
     --primary:      #1D9E75;
     --primary-dark: #166d52;
@@ -24,58 +22,102 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--body-font); font-size: 16px; background: #f0f4f8; color: var(--dark); margin: 0; padding: 24px 16px 48px; -webkit-font-smoothing: antialiased; }
-  .page { max-width: 780px; margin: 0 auto; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 32px rgba(0,0,0,0.10); }
-  .header { background: var(--grad); padding: 40px 44px 32px; position: relative; overflow: hidden; }
-  .header::after { content: ''; position: absolute; bottom: -30px; right: -30px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,0.05); }
-  .tool-tag { font-family: var(--heading-font); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--border); margin-bottom: 8px; }
-  .header h1 { font-family: var(--heading-font); font-weight: 900; font-size: 30px; color: #fff; line-height: 1.15; margin-bottom: 8px; }
+  body {
+    font-family: var(--body-font); font-size: 16px;
+    background: #f0f4f8; color: var(--dark);
+    margin: 0; padding: 24px 16px 48px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 780px; margin: 0 auto; background: #fff;
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+  }
+  .header {
+    background: var(--grad);
+    padding: 40px 44px 32px; position: relative; overflow: hidden;
+  }
+  .header::after {
+    content: ''; position: absolute;
+    bottom: -30px; right: -30px; width: 160px; height: 160px;
+    border-radius: 50%; background: rgba(255,255,255,0.05);
+  }
+  .tool-tag {
+    font-family: var(--heading-font); font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--border); margin-bottom: 8px;
+  }
+  .header h1 {
+    font-family: var(--heading-font); font-weight: 900; font-size: 30px;
+    color: #fff; line-height: 1.15; margin-bottom: 8px;
+  }
   .header-sub { font-size: 15px; color: var(--mid-bg); line-height: 1.6; max-width: 480px; }
   .credibility { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 14px; font-style: italic; }
 
   .body { padding: 36px 44px 44px; }
 
-  .section-title { font-family: var(--heading-font); font-weight: 800; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #fff; background: var(--dark); padding: 8px 16px; border-radius: 6px; margin-bottom: 16px; margin-top: 28px; display: block; }
+  .section-title {
+    font-family: var(--heading-font); font-weight: 800; font-size: 11px;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: #fff; background: var(--dark);
+    padding: 8px 16px; border-radius: 6px;
+    margin-bottom: 16px; margin-top: 28px; display: block;
+  }
+
+  .intro-box {
+    background: var(--light-bg);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px; margin-bottom: 28px;
+    font-size: 14.5px; color: var(--dark); line-height: 1.75;
+  }
+  .intro-box strong { font-weight: 700; color: #054e6f; }
 
   .field-group { margin-bottom: 18px; }
-  .field-label { font-family: var(--heading-font); font-size: 11px; font-weight: 700; color: #054e6f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: block; }
+  .field-label {
+    font-family: var(--heading-font); font-size: 11px; font-weight: 700;
+    color: #054e6f; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 6px; display: block;
+  }
   .field-hint { font-size: 13px; color: var(--gray-text); font-style: italic; margin-bottom: 8px; line-height: 1.5; }
-
-  input.fi, select.fi {
-    width: 100%; background: var(--gray-bg); border: 1.5px solid var(--mid-bg); border-radius: 8px;
+  input.fi, textarea.fi {
+    width: 100%; background: var(--gray-bg);
+    border: 1.5px solid var(--mid-bg); border-radius: 8px;
     font-family: var(--body-font); font-size: 15px; color: var(--dark);
-    padding: 12px 14px; outline: none; transition: border-color 0.2s; display: block; -webkit-appearance: none;
+    padding: 12px 14px; outline: none; resize: none;
+    transition: border-color 0.2s; display: block; -webkit-appearance: none;
   }
-  input.fi:focus, select.fi:focus { border-color: var(--primary); background: #f0fdf9; }
-  input.fi::placeholder { color: #B0BEC5; font-style: italic; font-size: 14px; }
-
-  /* INPUT WITH PREFIX */
-  .input-prefix-wrap { position: relative; }
-  .input-prefix {
-    position: absolute; left: 0; top: 0; bottom: 0;
-    display: flex; align-items: center;
-    padding: 0 14px;
-    font-family: var(--heading-font); font-size: 15px; font-weight: 700;
-    color: var(--primary); background: var(--light-bg);
-    border-right: 1.5px solid var(--mid-bg);
-    border-radius: 8px 0 0 8px;
-    pointer-events: none;
-  }
-  .input-prefix-wrap input.fi { padding-left: 52px; }
+  textarea.fi { height: 90px; line-height: 1.6; }
+  input.fi:focus, textarea.fi:focus { border-color: var(--primary); background: #f0fdf9; }
+  input.fi::placeholder, textarea.fi::placeholder { color: #B0BEC5; font-style: italic; font-size: 14px; }
 
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 
-  .email-gate { display: none; background: var(--light-bg); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 24px; margin-top: 20px; text-align: center; }
+  .email-gate {
+    display: none; background: var(--light-bg);
+    border: 1.5px solid var(--border); border-radius: var(--radius);
+    padding: 24px; margin-top: 20px; text-align: center;
+  }
   .email-gate.show { display: block; }
   .gate-title { font-family: var(--heading-font); font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 8px; }
   .gate-sub { font-size: 14px; color: var(--gray-text); margin-bottom: 16px; line-height: 1.6; }
   .gate-row { display: flex; gap: 10px; }
-  .gate-input { flex: 1; background: #fff; border: 1.5px solid var(--mid-bg); border-radius: 8px; font-family: var(--body-font); font-size: 15px; color: var(--dark); padding: 12px 14px; outline: none; -webkit-appearance: none; }
+  .gate-input {
+    flex: 1; background: #fff; border: 1.5px solid var(--mid-bg);
+    border-radius: 8px; font-family: var(--body-font);
+    font-size: 15px; color: var(--dark); padding: 12px 14px;
+    outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+  }
   .gate-input:focus { border-color: var(--primary); }
   .gate-input::placeholder { color: #B0BEC5; font-style: italic; }
 
-  .btn-primary { background: var(--primary); color: #fff; border: none; border-radius: 8px; font-family: var(--heading-font); font-size: 15px; font-weight: 800; padding: 13px 28px; cursor: pointer; transition: background 0.2s, transform 0.1s; white-space: nowrap; }
+  .btn-primary {
+    background: var(--primary); color: #fff; border: none;
+    border-radius: 8px; font-family: var(--heading-font);
+    font-size: 15px; font-weight: 800; padding: 13px 28px;
+    cursor: pointer; transition: background 0.2s, transform 0.1s; white-space: nowrap;
+  }
   .btn-primary:hover { background: var(--primary-dark); }
   .btn-primary:active { transform: scale(0.98); }
   .btn-primary:disabled { background: var(--border); cursor: not-allowed; }
@@ -83,51 +125,96 @@
 
   .loading { display: none; text-align: center; padding: 40px 0; }
   .loading.show { display: block; }
-  .spinner { width: 44px; height: 44px; border: 4px solid var(--mid-bg); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+  .spinner {
+    width: 44px; height: 44px; border: 4px solid var(--mid-bg);
+    border-top-color: var(--primary); border-radius: 50%;
+    animation: spin 0.8s linear infinite; margin: 0 auto 16px;
+  }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-text { font-family: var(--heading-font); font-size: 15px; font-weight: 700; color: var(--gray-text); }
 
   .results { display: none; }
   .results.show { display: block; }
 
-  /* HERO FIGURE */
-  .hero-figure { background: var(--grad); border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; text-align: center; }
-  .hero-label { font-family: var(--heading-font); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--border); margin-bottom: 10px; }
-  .hero-number { font-family: var(--heading-font); font-weight: 900; font-size: 56px; color: #fff; line-height: 1; letter-spacing: -2px; margin-bottom: 6px; }
-  .hero-sublabel { font-size: 14px; color: var(--mid-bg); }
-  .hero-summary { font-size: 15px; color: rgba(255,255,255,0.8); margin-top: 14px; line-height: 1.6; }
+  /* SUMMARY CARDS */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .summary-card {
+    background: var(--gray-bg); border: 1.5px solid var(--mid-bg);
+    border-radius: 10px; padding: 16px; text-align: center;
+  }
+  .summary-card.highlight { background: var(--light-bg); border-color: var(--primary); }
+  .summary-label {
+    font-family: var(--heading-font); font-size: 10px; font-weight: 700;
+    color: var(--gray-text); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+  }
+  .summary-value {
+    font-family: var(--heading-font); font-size: 22px; font-weight: 900; color: var(--dark);
+  }
+  .summary-value.good { color: var(--primary-dark); }
+  .summary-value.warn { color: #B45309; }
+  .summary-value.bad { color: #991B1B; }
 
-  /* BREAKDOWN TABLE */
-  .breakdown-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
-  .breakdown-table th { background: var(--dark); color: #fff; font-family: var(--heading-font); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; text-align: left; }
-  .breakdown-table td { padding: 12px 16px; border-bottom: 1px solid var(--mid-bg); font-size: 14px; }
-  .breakdown-table tr:nth-child(even) td { background: var(--light-bg); }
-  .breakdown-table td:last-child { font-weight: 700; text-align: right; }
+  /* VERDICT */
+  .verdict-box {
+    border-radius: 12px; padding: 20px 24px; margin-bottom: 20px;
+    border: 2px solid var(--primary);
+    background: var(--light-bg);
+  }
+  .verdict-box.warn { border-color: #F59E0B; background: #FFFBEB; }
+  .verdict-box.bad { border-color: #EF4444; background: #FEE2E2; }
+  .verdict-label {
+    font-family: var(--heading-font); font-size: 10px; font-weight: 700;
+    color: #054e6f; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;
+  }
+  .verdict-text { font-size: 16px; font-weight: 700; color: var(--dark); line-height: 1.5; }
 
-  /* INSIGHT ROW */
-  .insight-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
-  .insight-card { border-radius: var(--radius); padding: 16px 18px; border: 1.5px solid var(--mid-bg); }
-  .insight-card.timeline { background: var(--light-bg); border-color: var(--border); }
-  .insight-card.assumption { background: #FEF3C7; border-color: #F59E0B; }
-  .insight-card.reality { background: #FEE2E2; border-color: #FECACA; grid-column: 1 / -1; }
-  .insight-card.reality.ok { background: #D1FAE5; border-color: var(--border); }
-  .insight-card.action { background: var(--dark); border-color: var(--dark); grid-column: 1 / -1; }
-  .insight-label { font-family: var(--heading-font); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-  .insight-card.timeline .insight-label { color: #054e6f; }
-  .insight-card.assumption .insight-label { color: #92400E; }
-  .insight-card.reality .insight-label { color: #991B1B; }
-  .insight-card.reality.ok .insight-label { color: #065F46; }
-  .insight-card.action .insight-label { color: var(--border); }
-  .insight-text { font-size: 14px; line-height: 1.65; color: var(--dark); }
-  .insight-card.action .insight-text { color: #CCF2F3; }
+  /* RECOMMENDATIONS */
+  .rec-item {
+    background: var(--gray-bg); border: 1.5px solid var(--mid-bg);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 10px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .rec-num {
+    font-family: var(--heading-font); font-size: 22px; font-weight: 900;
+    color: var(--mid-bg); line-height: 1; flex-shrink: 0; min-width: 28px;
+  }
+  .rec-content { flex: 1; }
+  .rec-action { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 6px; line-height: 1.4; }
+  .rec-detail { font-size: 13.5px; color: var(--gray-text); line-height: 1.5; }
 
-  .reset-btn { background: transparent; color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; font-family: var(--heading-font); font-size: 14px; font-weight: 700; padding: 11px 28px; cursor: pointer; transition: all 0.2s; margin-top: 20px; }
+  .breakdown-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  .breakdown-table td { padding: 10px 4px; font-size: 14px; border-bottom: 1px solid var(--mid-bg); }
+  .breakdown-table td:first-child { color: var(--gray-text); }
+  .breakdown-table td:last-child { text-align: right; font-weight: 700; color: var(--dark); font-family: var(--heading-font); }
+  .breakdown-table tr:last-child td { border-bottom: none; font-weight: 900; }
+
+  .confidence-note {
+    font-size: 14px; color: var(--dark); margin-top: 16px;
+    font-style: normal; font-weight: 600; line-height: 1.6;
+    background: var(--gray-bg); border: 1.5px solid var(--mid-bg);
+    border-radius: 8px; padding: 12px 16px;
+  }
+  .confidence-note strong { color: var(--primary-dark); font-weight: 800; }
+
+  .reset-btn {
+    background: transparent; color: var(--primary);
+    border: 2px solid var(--primary); border-radius: 8px;
+    font-family: var(--heading-font); font-size: 14px; font-weight: 700;
+    padding: 11px 28px; cursor: pointer; transition: all 0.2s; margin-top: 20px;
+  }
   .reset-btn:hover { background: var(--light-bg); }
 
-  .error-box { background: #FEE2E2; border: 1.5px solid #FECACA; border-radius: 8px; padding: 14px 18px; font-size: 14px; color: #991B1B; display: none; margin-top: 14px; line-height: 1.6; }
+  .error-box {
+    background: #FEE2E2; border: 1.5px solid #FECACA;
+    border-radius: 8px; padding: 14px 18px; font-size: 14px; color: #991B1B;
+    display: none; margin-top: 14px; line-height: 1.6;
+  }
   .error-box.show { display: block; }
 
-  .footer { background: var(--dark); padding: 14px 44px; display: flex; justify-content: space-between; align-items: center; margin-top: 28px; }
+  .footer {
+    background: var(--dark); padding: 14px 44px;
+    display: flex; justify-content: space-between; align-items: center; margin-top: 28px;
+  }
   .footer-brand { font-family: var(--heading-font); font-weight: 900; font-size: 14px; color: var(--border); letter-spacing: 1px; }
   .footer-url { font-size: 12px; color: var(--mid-bg); opacity: 0.6; }
 
@@ -135,8 +222,7 @@
     .body { padding: 24px 20px 32px; }
     .header { padding: 28px 20px 24px; }
     .footer { padding: 14px 20px; flex-direction: column; gap: 6px; }
-    .two-col, .three-col, .insight-row { grid-template-columns: 1fr; }
-    .insight-card.reality, .insight-card.action { grid-column: 1; }
+    .two-col, .three-col, .summary-grid { grid-template-columns: 1fr; }
     .gate-row { flex-direction: column; }
   }
 </style>
@@ -145,11 +231,10 @@
 <div class="page">
 
   <div class="header">
-    <!-- CUSTOMIZE: Update tag, title, subtitle, credibility -->
-    <div class="tool-tag">Your Brand Name</div>
-    <h1>Your Calculator Tool Name</h1>
-    <div class="header-sub">One sentence describing what the user inputs and what calculated output or plan they get back.</div>
-    <div class="credibility">Built by [Your Name] — [Your credibility signal]</div>
+    <div class="tool-tag">Digital Ease Studio</div>
+    <h1>Profit Margin Planner</h1>
+    <div class="header-sub">Enter your product or service numbers and get your real margin, an industry benchmark comparison, and the fastest fixes to protect your profit.</div>
+    <div class="credibility">Built by Jade Janosi — 10 years in growth marketing and digital product strategy</div>
   </div>
 
   <div class="body">
@@ -157,74 +242,58 @@
     <div id="form-section">
       <div class="section-title">Enter Your Numbers</div>
 
-      <!-- CUSTOMIZE: Update all input fields for your calculator -->
-      <!-- Use input type="number" for numerical inputs -->
-      <!-- Use the input-prefix-wrap pattern for currency or unit prefixes -->
-
-      <div class="two-col">
-        <div class="field-group">
-          <span class="field-label">Your goal</span>
-          <div class="field-hint">What outcome are you trying to achieve?</div>
-          <div class="input-prefix-wrap">
-            <span class="input-prefix">$</span>
-            <input type="number" class="fi" id="input-goal" placeholder="e.g. 5000" min="0">
-          </div>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Time frame</span>
-          <div class="field-hint">How long to achieve this goal?</div>
-          <select class="fi" id="input-timeframe">
-            <option value="">Select...</option>
-            <option value="30 days">30 days</option>
-            <option value="90 days">90 days</option>
-            <option value="6 months">6 months</option>
-            <option value="12 months">12 months</option>
-          </select>
-        </div>
+      <div class="intro-box">
+        <strong>Be exact.</strong> Use your real costs, not rough guesses. Include every cost that touches this product or service, materials, labor, platform fees, shipping, so the margin you get back reflects reality, not a best-case scenario.
       </div>
 
       <div class="two-col">
         <div class="field-group">
-          <span class="field-label">Current figure</span>
-          <div class="field-hint">Where are you starting from?</div>
-          <div class="input-prefix-wrap">
-            <span class="input-prefix">$</span>
-            <input type="number" class="fi" id="input-current" placeholder="e.g. 1000" min="0">
-          </div>
+          <span class="field-label">Product or service name</span>
+          <div class="field-hint">What are we calculating margin for?</div>
+          <input type="text" class="fi" id="product-input" placeholder="e.g. 1:1 coaching package, candle line, website package...">
         </div>
         <div class="field-group">
-          <span class="field-label">Key variable</span>
-          <div class="field-hint">A key input that affects the calculation.</div>
-          <input type="number" class="fi" id="input-variable" placeholder="e.g. 3" min="0">
+          <span class="field-label">Selling price</span>
+          <div class="field-hint">What the customer pays, per unit or per package.</div>
+          <input type="text" class="fi" id="price-input" placeholder="e.g. $150">
         </div>
       </div>
 
-      <!-- CUSTOMIZE: Add additional fields as needed -->
       <div class="field-group">
-        <span class="field-label">Additional context (optional)</span>
-        <div class="field-hint">Anything else that affects this calculation or plan.</div>
-        <input type="text" class="fi" id="input-context"
-          placeholder="e.g. I have an existing audience of 500 people...">
+        <span class="field-label">All costs to deliver this</span>
+        <div class="field-hint">List every cost involved: materials, labor or your time at an hourly rate, platform or payment processing fees, shipping, packaging, software, ads. Be as specific as possible.</div>
+        <textarea class="fi" id="costs-input"
+          placeholder="e.g. Materials $40, my time 3 hours at $25/hr = $75, Stripe fees 3% = $4.50, packaging $6, shipping $8"></textarea>
+      </div>
+
+      <div class="two-col">
+        <div class="field-group">
+          <span class="field-label">Industry or niche</span>
+          <div class="field-hint">Helps benchmark your margin against typical ranges.</div>
+          <input type="text" class="fi" id="industry-input" placeholder="e.g. e-commerce, coaching, freelance design...">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Monthly volume (optional)</span>
+          <div class="field-hint">Units or clients per month, if relevant.</div>
+          <input type="text" class="fi" id="volume-input" placeholder="e.g. 20 units/month">
+        </div>
       </div>
 
       <div class="submit-wrap">
         <button class="btn-primary" id="submit-btn" onclick="handleSubmit()">
-          Calculate →
+          Calculate My Margin →
         </button>
       </div>
-      <div class="error-box" id="error-box">
-        Please fill in the required fields before calculating.
-      </div>
+      <div class="error-box" id="error-box">Please enter a selling price and your costs before calculating.</div>
     </div>
 
     <!-- EMAIL GATE -->
     <div class="email-gate" id="email-gate">
-      <div class="gate-title">Your calculation is ready.</div>
-      <!-- CUSTOMIZE: Update gate copy -->
-      <div class="gate-sub">Enter your email to receive your full breakdown and action plan.</div>
+      <div class="gate-title">Your margin breakdown is ready.</div>
+      <div class="gate-sub">Enter your email to receive your full profit margin plan.</div>
       <div class="gate-row">
         <input type="email" class="gate-input" id="gate-email" placeholder="your@email.com">
-        <button class="btn-primary" id="gate-btn" onclick="handleGate()">Show My Results</button>
+        <button class="btn-primary" id="gate-btn" onclick="handleGate()">Send My Plan</button>
       </div>
       <div class="error-box" id="gate-error">Please enter a valid email address.</div>
     </div>
@@ -232,86 +301,72 @@
     <!-- LOADING -->
     <div class="loading" id="loading">
       <div class="spinner"></div>
-      <div class="loading-text">Running your calculation...</div>
+      <div class="loading-text">Calculating your margin... about 10 seconds.</div>
     </div>
 
     <!-- RESULTS -->
     <div class="results" id="results">
+      <div class="section-title">Your Profit Margin Plan</div>
 
-      <div class="hero-figure">
-        <div class="hero-label" id="hero-label">Your Result</div>
-        <div class="hero-number" id="hero-number">—</div>
-        <div class="hero-sublabel" id="hero-sublabel"></div>
-        <div class="hero-summary" id="hero-summary"></div>
-      </div>
-
-      <div class="section-title">Breakdown</div>
-      <table class="breakdown-table">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th style="text-align:right;">Figure</th>
-          </tr>
-        </thead>
-        <tbody id="breakdown-body"></tbody>
-      </table>
-
-      <div class="section-title" style="margin-top:0;">Plan and Insights</div>
-      <div class="insight-row">
-        <div class="insight-card timeline">
-          <div class="insight-label">Realistic Timeline</div>
-          <div class="insight-text" id="timeline-text"></div>
+      <div class="summary-grid">
+        <div class="summary-card highlight">
+          <div class="summary-label">Margin</div>
+          <div class="summary-value" id="margin-value">—</div>
         </div>
-        <div class="insight-card assumption">
-          <div class="insight-label">Key Assumption</div>
-          <div class="insight-text" id="assumption-text"></div>
+        <div class="summary-card">
+          <div class="summary-label">Profit / Unit</div>
+          <div class="summary-value" id="profit-value">—</div>
         </div>
-        <div class="insight-card reality" id="reality-card">
-          <div class="insight-label">Reality Check</div>
-          <div class="insight-text" id="reality-text"></div>
-        </div>
-        <div class="insight-card action">
-          <div class="insight-label">Your Top Action Right Now</div>
-          <div class="insight-text" id="action-text"></div>
+        <div class="summary-card">
+          <div class="summary-label">Benchmark</div>
+          <div class="summary-value" id="benchmark-value">—</div>
         </div>
       </div>
 
-      <button class="reset-btn" onclick="resetTool()">Calculate Again</button>
+      <div class="verdict-box" id="verdict-box">
+        <div class="verdict-label">Verdict</div>
+        <div class="verdict-text" id="verdict-text"></div>
+      </div>
+
+      <div class="section-title" style="margin-top:0;">Cost Breakdown</div>
+      <table class="breakdown-table" id="breakdown-table"></table>
+
+      <div class="section-title">How To Improve This</div>
+      <div id="recs-list"></div>
+
+      <div class="confidence-note" id="confidence-note"></div>
+
+      <button class="reset-btn" onclick="resetTool()">Calculate a Different Product</button>
     </div>
 
   </div>
 
   <div class="footer">
-    <!-- CUSTOMIZE: Update brand name and URL -->
-    <div class="footer-brand">YOUR BRAND</div>
-    <div class="footer-url">yourwebsite.com</div>
+    <div class="footer-brand">DIGITAL EASE STUDIO</div>
+    <div class="footer-url">jadejanosi.com</div>
   </div>
 
 </div>
 
 <script>
-let pendingInputs = null;
+let pendingInput = null;
 
 async function handleSubmit() {
-  // CUSTOMIZE: Update field IDs and validation
-  const goal = document.getElementById('input-goal').value.trim();
-  const timeframe = document.getElementById('input-timeframe').value;
-  const current = document.getElementById('input-current').value.trim();
-  const variable = document.getElementById('input-variable').value.trim();
-  const context = document.getElementById('input-context').value.trim();
+  const product = document.getElementById('product-input').value.trim();
+  const price = document.getElementById('price-input').value.trim();
+  const costs = document.getElementById('costs-input').value.trim();
+  const industry = document.getElementById('industry-input').value.trim();
+  const volume = document.getElementById('volume-input').value.trim();
   const errorBox = document.getElementById('error-box');
 
   errorBox.classList.remove('show');
 
-  // CUSTOMIZE: Update required field validation
-  if (!goal || !timeframe) {
-    errorBox.textContent = 'Please fill in your goal and time frame before calculating.';
+  if (!price || !costs) {
     errorBox.classList.add('show');
     return;
   }
 
-  // CUSTOMIZE: Build the input string to match your system prompt
-  pendingInputs = `Goal: ${goal}\nTime frame: ${timeframe}${current ? '\nCurrent figure: ' + current : ''}${variable ? '\nKey variable: ' + variable : ''}${context ? '\nAdditional context: ' + context : ''}`;
+  pendingInput = `Product/Service: ${product || 'Not specified'}\nSelling Price: ${price}\nCosts: ${costs}${industry ? '\nIndustry: ' + industry : ''}${volume ? '\nMonthly Volume: ' + volume : ''}`;
 
   document.getElementById('form-section').style.display = 'none';
   document.getElementById('email-gate').classList.add('show');
@@ -330,14 +385,14 @@ async function handleGate() {
   document.getElementById('email-gate').classList.remove('show');
   document.getElementById('loading').classList.add('show');
 
-  // CUSTOMIZE: add email capture here — see Module 4 Lesson 4.5
+  // Add email capture here — see Module 4 Lesson 4.5
   // await captureEmail(email);
 
   try {
     const response = await fetch('/api/calculate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userInputs: pendingInputs })
+      body: JSON.stringify({ userInput: pendingInput })
     });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || 'Error');
@@ -349,35 +404,50 @@ async function handleGate() {
     eb.textContent = 'Something went wrong. Please try again.';
     eb.classList.add('show');
     gateBtn.disabled = false;
-    gateBtn.textContent = 'Show My Results';
+    gateBtn.textContent = 'Send My Plan';
   }
 }
 
 function displayResults(r) {
   document.getElementById('loading').classList.remove('show');
 
-  // Hero figure
-  document.getElementById('hero-label').textContent = r.primary_label || 'Your Result';
-  document.getElementById('hero-number').textContent = r.primary_figure || '—';
-  document.getElementById('hero-summary').textContent = r.summary || '';
+  document.getElementById('margin-value').textContent = r.margin_percent || '—';
+  document.getElementById('profit-value').textContent = r.profit_per_unit || '—';
+  document.getElementById('benchmark-value').textContent = r.benchmark_comparison || '—';
 
-  // Breakdown table
-  const tbody = document.getElementById('breakdown-body');
-  tbody.innerHTML = '';
-  (r.breakdown || []).forEach(row => {
-    tbody.innerHTML += `<tr><td>${row.label || ''}</td><td>${row.value || ''}</td></tr>`;
+  const marginEl = document.getElementById('margin-value');
+  marginEl.className = 'summary-value ' + (r.margin_health === 'good' ? 'good' : r.margin_health === 'warn' ? 'warn' : r.margin_health === 'bad' ? 'bad' : '');
+
+  const verdictBox = document.getElementById('verdict-box');
+  verdictBox.className = 'verdict-box ' + (r.margin_health === 'warn' ? 'warn' : r.margin_health === 'bad' ? 'bad' : '');
+  document.getElementById('verdict-text').textContent = r.verdict || '';
+
+  const table = document.getElementById('breakdown-table');
+  table.innerHTML = '';
+  (r.cost_breakdown || []).forEach(line => {
+    table.innerHTML += `<tr><td>${line.label || ''}</td><td>${line.amount || ''}</td></tr>`;
+  });
+  if (r.profit_per_unit) {
+    table.innerHTML += `<tr><td>Profit Per Unit</td><td>${r.profit_per_unit}</td></tr>`;
+  }
+
+  const recsList = document.getElementById('recs-list');
+  recsList.innerHTML = '';
+  [r.recommendation_1, r.recommendation_2, r.recommendation_3].forEach((rec, i) => {
+    if (!rec) return;
+    recsList.innerHTML += `
+      <div class="rec-item">
+        <div class="rec-num">${i + 1}</div>
+        <div class="rec-content">
+          <div class="rec-action">${rec.action || ''}</div>
+          <div class="rec-detail">${rec.detail || ''}</div>
+        </div>
+      </div>`;
   });
 
-  // Insights
-  document.getElementById('timeline-text').textContent = r.timeline || '';
-  document.getElementById('assumption-text').textContent = r.key_assumption || '';
-  document.getElementById('action-text').textContent = r.top_action || '';
-
-  const realityText = r.reality_check || '';
-  document.getElementById('reality-text').textContent = realityText;
-  const realityCard = document.getElementById('reality-card');
-  if (realityText.toLowerCase().includes('realistic')) {
-    realityCard.classList.add('ok');
+  if (r.confidence) {
+    document.getElementById('confidence-note').innerHTML =
+      `Calculation confidence: <strong>${r.confidence}</strong>. The more precise your cost inputs, the more accurate this plan.`;
   }
 
   document.getElementById('results').classList.add('show');
@@ -387,17 +457,18 @@ function displayResults(r) {
 function resetTool() {
   document.getElementById('results').classList.remove('show');
   document.getElementById('form-section').style.display = 'block';
-  ['input-goal','input-timeframe','input-current','input-variable','input-context'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('breakdown-body').innerHTML = '';
+  document.getElementById('product-input').value = '';
+  document.getElementById('price-input').value = '';
+  document.getElementById('costs-input').value = '';
+  document.getElementById('industry-input').value = '';
+  document.getElementById('volume-input').value = '';
+  document.getElementById('breakdown-table').innerHTML = '';
+  document.getElementById('recs-list').innerHTML = '';
+  document.getElementById('confidence-note').textContent = '';
   document.getElementById('error-box').classList.remove('show');
   document.getElementById('gate-btn').disabled = false;
-  document.getElementById('gate-btn').textContent = 'Show My Results';
-  document.getElementById('gate-email').value = '';
-  document.getElementById('reality-card').classList.remove('ok');
-  pendingInputs = null;
+  document.getElementById('gate-btn').textContent = 'Send My Plan';
+  pendingInput = null;
   window.scrollTo(0, 0);
 }
 </script>
