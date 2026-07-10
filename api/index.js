@@ -1,43 +1,18 @@
-// ============================================================
-// NOVA STARTER TEMPLATE — CALCULATOR / PLANNER TOOL
-// ============================================================
-// This serverless function calls the Claude API and returns
-// calculated figures, projections, or a structured plan
-// based on numerical or specific inputs from the user.
-//
-// WHAT TO CHANGE:
-// 1. The system prompt — especially the calculation logic
-// 2. The JSON keys to match your output structure
-// 3. The temperature (0.2-0.4 for consistent calculations)
-// ============================================================
-
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // CUSTOMIZE: match to what your frontend sends
-  const { userInputs } = req.body;
+  const { userInput } = req.body;
 
-  if (!userInputs) {
-    return res.status(400).json({ error: 'Inputs are required' });
+  if (!userInput) {
+    return res.status(400).json({ error: 'Missing userInput' });
   }
 
-  // ============================================================
-  // SYSTEM PROMPT — CUSTOMIZE THIS FOR YOUR TOOL
-  // ============================================================
-  const systemPrompt = `
-[ROLE]
-You are a profit margin advisor. Given a product/service, selling price, and cost breakdown, calculate the true profit margin and give the user a clear, actionable plan.
-
-[TASK]
+  const systemPrompt = `TASK
 Calculate the true profit margin for the product or service described, based on the selling price and full cost breakdown provided. Identify whether the margin is healthy for the stated industry, and give three specific, actionable recommendations to protect or improve it.
 
-[CONTEXT]
+CONTEXT
 You are a profit margin advisor helping non-technical business owners and creators understand whether their pricing actually makes them money. Many people price based on what feels right or what competitors charge, without accounting for every real cost, especially their own time, payment processing fees, and small recurring costs that quietly erode margin.
 
 The user will describe:
@@ -53,7 +28,7 @@ Industry benchmark ranges to use:
 
 If the user does not list their own labor or time as a cost, flag this. Time is the most commonly missing cost, and omitting it makes margin look artificially healthy.
 
-[CONSTRAINTS]
+CONSTRAINTS
 - Return ONLY valid JSON, no preamble, no markdown formatting, no explanation outside the JSON object
 - Every dollar figure must be calculated from the user's actual inputs, never invented or estimated without basis
 - If a cost is ambiguous (e.g. "some shipping"), make a reasonable assumption and note it in the verdict rather than skipping it
@@ -63,13 +38,13 @@ If the user does not list their own labor or time as a cost, flag this. Time is 
 - Keep the verdict to one sentence, direct, no hedging
 - Do not recommend raising prices as the only fix. At least one recommendation should address cost reduction where the input data supports it
 
-[FORMAT]
-Return ONLY a valid JSON object with these exact keys.
+OUTPUT FORMAT
+Return ONLY valid JSON in this exact format, with no text before or after it:
 {
   "margin_percent": "e.g. 38%",
   "profit_per_unit": "e.g. $57.00",
   "benchmark_comparison": "e.g. Below average",
-  "margin_health": "good | warn | bad",
+  "margin_health": "good",
   "verdict": "one sentence, direct, tells them if this margin is sustainable",
   "cost_breakdown": [
     {"label": "Materials", "amount": "$40.00"},
@@ -77,20 +52,10 @@ Return ONLY a valid JSON object with these exact keys.
     {"label": "Platform Fees", "amount": "$4.50"}
   ],
   "recommendation_1": {"action": "short headline", "detail": "one to two sentences, specific"},
-  "recommendation_2": {"action": "...", "detail": "..."},
-  "recommendation_3": {"action": "...", "detail": "..."},
-  "confidence": "High | Medium | Low"
-}
-
-Industry benchmark guidance:
-- E-commerce/physical products: 20-30% is average, below 15% is a warning sign
-- Services/coaching: 50-70% is average given lower material cost
-- Freelance/agency: 40-60% depending on overhead
-
-Use "good" for margin_health if the margin meets or beats the benchmark, "warn" if it's marginal, "bad" if it's below sustainable.
-{
-
-`;
+  "recommendation_2": {"action": "short headline", "detail": "one to two sentences, specific"},
+  "recommendation_3": {"action": "short headline", "detail": "one to two sentences, specific"},
+  "confidence": "High"
+}`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -102,32 +67,38 @@ Use "good" for margin_health if the margin meets or beats the benchmark, "warn" 
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
+        max_tokens: 1500,
         system: systemPrompt,
-        messages: [{ role: 'user', content: userInputs }],
-        // CUSTOMIZE: low temperature for consistent calculations
-        // Recommended: 0.2 to 0.4
-        temperature: 0.3
+        messages: [
+          { role: 'user', content: userInput }
+        ]
       })
     });
 
-    const data = await response.json();
-
     if (!response.ok) {
-      return res.status(500).json({
-        error: data.error?.message || 'Claude API error'
-      });
+      const errText = await response.text();
+      console.error('Anthropic API error:', errText);
+      return res.status(500).json({ error: 'Failed to calculate margin. Please try again.' });
     }
 
-    const raw = data.content[0].text.trim();
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const result = JSON.parse(clean);
+    const data = await response.json();
+    const rawText = data.content?.[0]?.text || '';
+
+    let cleanText = rawText.trim();
+    cleanText = cleanText.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '');
+
+    let result;
+    try {
+      result = JSON.parse(cleanText);
+    } catch (parseErr) {
+      console.error('JSON parse error:', parseErr, 'Raw text:', rawText);
+      return res.status(500).json({ error: 'Something went wrong. Please try again.' });
+    }
 
     return res.status(200).json(result);
 
   } catch (err) {
-    return res.status(500).json({
-      error: 'Something went wrong. Please try again.'
-    });
+    console.error('Server error:', err);
+    return res.status(500).json({ error: 'Something went wrong. Please try again.' });
   }
 }
